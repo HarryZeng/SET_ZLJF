@@ -45,7 +45,7 @@ extern int16_t adc_dma_tab[DMA_BUFFER_SIZE];
 extern  uint8_t DX_Flag;
 extern uint8_t sample_finish;
 extern int32_t 	SET_VREF;
-
+extern uint32_t ADC_Display;//ADC显示
 
 void selfstudy(void)
 {
@@ -69,7 +69,7 @@ void selfstudy(void)
 				GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
 
 				/*按着按键3秒内*/
-				SMG_DisplaySET_Step_1_Mode(0,0);  //显示SET1
+				SMG_DisplaySET_Step_1_Mode(2,ADC_Display);  //显示SET1和信号值
 				
 				/*第一次SET1，找最大SET1的值*/
 				SelfStudy_SET1();
@@ -78,8 +78,9 @@ void selfstudy(void)
 				{		
 					if(SetButton.Status == Press && SetButton.Effect == PressShort) 
 					{
-						SMG_DisplaySET_Step_2_Mode(0,Final,0);
 						SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
+						SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
+						
 						//DX_Flag = 1;
 						//break;
 					}
@@ -143,20 +144,19 @@ void SelfStudy_SET2(void)
 					SMG_DisplaySET_Step_2_Mode(0,Final,0);
 				}
 				
-				while(SetButton.Effect == PressLong) /*按下按键已经超过时间，而且没有释放，闪烁提醒*/
+				while(SetButton.Effect == PressShort) /*改成了短按*/
 				{	/*3秒到了,闪烁提醒*/
 					if(EventFlag&Blink500msFlag) 
 					{
 						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
 						SMG_DisplaySET_Step_2_Mode(1,0,0);     
 					}				
-					while(SetButton.Effect == PressLong && SetButton.Status == Release) /*按键达到3秒后，结束第二次SET按键*/
+					while(SetButton.Effect == PressShort && SetButton.Status == Release) /*按键达到3秒后，结束第二次SET按键*/
 					{		/*3秒到了，并释放了按键*/
 						
 						//NewThreshold = (S_MaxValue*3)/4;  //SMAX的3/4作为阈值
 						if(NewThreshold<=20) NewThreshold=20;
 						if(NewThreshold>=4095) NewThreshold=4095;
-						
 						
 						GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin));
 						GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin));

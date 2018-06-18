@@ -115,7 +115,7 @@ int16_t Threshold = 1000;
 int16_t DX = 0;
 int16_t DX_Index = 0;
 int16_t Last_DX = 0;
-int16_t Min_DX = 3000;
+int16_t Min_DX = 4095;
 int16_t Max_DX = 0;
 uint8_t DX_Flag = 1;
 
@@ -328,12 +328,17 @@ void DMA1_Channel1_IRQHandler(void)
 				Final_1 = SA_Sum / 4;
 				SA_Sum = 0;
 				
-				FX = SET_VREF - TX;     /*求FX*/
-				if(FX>=600) FX = 600;		/**FX范围**/
-				else if(FX<=-600) FX = -600;
-				
 				if(displayModeONE_FLAG==1)	/**AREA模式下，FX=0**/
-					FX  = 0;
+				{
+					FX = 0;
+					TX = 0;
+				}
+				else if(displayModeONE_FLAG==0)/*STD模式下*/
+				{
+					FX = SET_VREF - TX;     /*求FX*/
+					if(FX>=600) FX = 600;		/**FX范围**/
+					else if(FX<=-600) FX = -600;
+				}
 				
 				Final = Final_1 + FX ;  //最终信号值
 				
@@ -343,6 +348,7 @@ void DMA1_Channel1_IRQHandler(void)
 						Final = 0;
 				
 				/***************DX*************/
+				
 				DX_Index++;
 				if(Final>=Max_DX)
 					Max_DX = Final;
@@ -352,21 +358,23 @@ void DMA1_Channel1_IRQHandler(void)
 				{
 					DX_Index = 0;
 					DX = Max_DX - Min_DX;
+					Max_DX = 0;    /*初始化变量*/
+					Min_DX = 4095; /*初始化变量*/
 				}
 				
 				/***********Register A**********/
 				if(displayModeONE_FLAG==1)	/**AREA模式**/
 				{
-					if(Final>=LO+2+0.25*DX && Final<=HI-2-0.25*DX)
+					if(Final>=LO+2+DX && Final<=HI-2-DX)
 						RegisterA = 1;
-					else if((Final>=0&&Final<=LO-20-LO/128-DX)||(Final>=HI+20+HI/128+DX && Final<=9999))
+					else if((Final>=0&&Final<=LO-20-LO/128-0.125*DX)||(Final>=HI+20+HI/128+0.125*DX && Final<=9999)) //2018-06-18
 						RegisterA = 0;
 				}
 				else if(displayModeONE_FLAG==0)/**STD模式**/
 				{
-					if(Final>=Threshold+2+0.25*DX)
+					if(Final>=Threshold+2+DX)  //2018-06-18  TH+2+DX
 						RegisterA = 1;
-					else if(Final<=Threshold-10-Threshold/128-DX)
+					else if(Final<=Threshold-6-Threshold/128-0.125*DX) //2018-06-18 TH-6-TH/128-0.125*DX
 						RegisterA = 0;
 					
 					/******TX******/
@@ -412,7 +420,9 @@ void DMA1_Channel1_IRQHandler(void)
 
 		/*设置OUT1的状态*/
 		SetOUT1Status();
-
+			/*OUT2输出*/
+		SetOUT2Status();
+			
 		/*显示OUT1和OUT2的状态*/
 		SMG_DisplayOUT_STATUS(OUT1, OUT2);
 		DMA_ClearITPendingBit(DMA_IT_TC); //清楚DMA中断标志位
@@ -647,9 +657,6 @@ void Main_Function(void)
 
 			/*按键复用*/
 			ButtonMapping();
-
-			/*OUT2输出*/
-			SetOUT2Status();
 
 			if (KEY == ULOC) /*判断按键是否上锁*/
 			{
@@ -1328,6 +1335,7 @@ void SetOUT1Status(void)
 			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
 				OUT1_Mode.DelayCounter = 0;
+				CPV_Status = 1;
 			}
 			else
 			{
@@ -1340,6 +1348,23 @@ void SetOUT1Status(void)
 		{
 			if (OUT1 == 0)
 			{
+				if (OUT1_Mode.DelayCounter > (OUT1_Mode.DelayValue * DealyBaseTime))
+				{
+					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
+					CPV_Status = 1;
+				}
+			}
+			else
+			{
+				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
+				OUT1_Mode.DelayCounter = 0;
+			}			
+		}
+		/*ON_D*/
+		else if (OUT1_Mode.DelayMode == ON_D)
+		{
+			if (OUT1 == 0)
+			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
 				OUT1_Mode.DelayCounter = 0;
 			}
@@ -1348,23 +1373,8 @@ void SetOUT1Status(void)
 				if (OUT1_Mode.DelayCounter > (OUT1_Mode.DelayValue * DealyBaseTime))
 				{
 					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
+					CPV_Status = 1;
 				}
-			}
-		}
-		/*ON_D*/
-		else if (OUT1_Mode.DelayMode == ON_D)
-		{
-			if (OUT1 == 0)
-			{
-				if (OUT1_Mode.DelayCounter > (OUT1_Mode.DelayValue * DealyBaseTime))
-				{
-					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
-				}
-			}
-			else
-			{
-				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
-				OUT1_Mode.DelayCounter = 0;
 			}
 		}
 		/*SHOT*/
@@ -1376,6 +1386,7 @@ void SetOUT1Status(void)
 				{
 					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
 					SHOTflag = 1;
+					CPV_Status = 1;
 				}
 				else
 				{
@@ -1619,7 +1630,7 @@ void GetEEPROM(void)
 ****************************/
 void ResetParameter(void)
 {
-	SV = 900;
+	CSV = 1000;
 	Threshold = 300;
 	KEY = ULOC;
 	OUT1_Mode.DelayMode = TOFF;

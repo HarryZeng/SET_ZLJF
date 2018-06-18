@@ -97,7 +97,7 @@ void menu(void)
 					/*Up Button*/
 					if((UpButton.PressCounter !=lastCounter)&&(UpButton.Effect==PressShort))
 					{
-						lastCounter = UpButton.PressCounter;
+						//lastCounter = UpButton.PressCounter;
 						UpButton.PressCounter = 0;
 						if(displayModeONE_FLAG==0)
 							displayModeONE_FLAG = 1;
@@ -109,6 +109,7 @@ void menu(void)
 					/*Down Button*/
 					else if(DownButton.PressCounter !=lastCounter && DownButton.Effect==PressShort)
 					{
+						//lastCounter = DownButton.PressCounter;
 						DownButton.PressCounter = 0;
 						if(displayModeONE_FLAG==0)
 							displayModeONE_FLAG = 1;

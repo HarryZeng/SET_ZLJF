@@ -41,7 +41,7 @@ void Button_Init(void)
 	SetButton.Status = Release;
 	SetButton.WorkIn = WorkLow;
 	SetButton.Effect = PressNOEffect;
-	SetButton.ShortTime = 1*timer_period;
+	SetButton.ShortTime = 1*25;
 	SetButton.LongTime = 20*timer_period;   
  
 	ModeButton.ButtonPort = BUTTON_MODE_GPIO_Port;
