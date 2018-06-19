@@ -26,6 +26,10 @@
 #include 	"stdbool.h"
 #include 	"stdint.h"
 	 
+#define timer_period 6 //ms
+#define shortKEY 	100
+#define middleKEY	1000
+#define longKEY		3000	 
 	 
 #define KEY_LEVEL_1   		400
 #define KEY_LEVEL_1_SET   10

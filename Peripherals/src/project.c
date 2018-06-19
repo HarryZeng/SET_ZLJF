@@ -33,7 +33,7 @@ uint16_t DEL = 50;
 int16_t HI = 1000;
 int16_t LO = 700;
 bool timeflag = 0;
-uint8_t LastOUT1 = 0;
+uint8_t LastOUT1 = 1;
 uint8_t RegisterA = 0;
 uint8_t LastRegisterA = 0;
 uint8_t RegisterB = 1;
@@ -107,7 +107,7 @@ uint8_t S_Final_FinishFlag = 0;
 uint32_t S32 = 0;
 uint8_t S32_Flag = 0;
 
-int32_t S_SET = 0;
+
 uint32_t S_Selft = 0;
 
 int16_t Threshold = 1000;
@@ -125,6 +125,7 @@ int32_t TX_Sum=0;
 
 int32_t 	SET_VREF = 0;
 int16_t 	FX = 0;
+uint8_t 	FX_Flag = 1;
 
 uint32_t Display_Signal[256];
 uint32_t Display_Signal_Index = 0;
@@ -218,70 +219,70 @@ uint32_t S1024_Sum = 0;
 #define S1024_Or_S8192 1024
 void JudgeDX(void)
 {
-	/*判断灰层影响程度*/
-	if (displayModeONE_FLAG == 0)
-	{
-		if (RegisterA) //STD——Mode
-		{
+//	/*判断灰层影响程度*/
+//	if (displayModeONE_FLAG == 0)
+//	{
+//		if (RegisterA) //STD——Mode
+//		{
 
-			//S1024_Sum = S1024_Sum + S_Final;
-			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
-			S1024_Index++;
-			if (S1024_Index >= S1024_Or_S8192)
-			{
-				S1024_Index = 0;
-				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
+//			//S1024_Sum = S1024_Sum + S_Final;
+//			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
+//			S1024_Index++;
+//			if (S1024_Index >= S1024_Or_S8192)
+//			{
+//				S1024_Index = 0;
+//				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
 
-				if (DSC)				//modifiy 20180105
-					DX = S_SET - S1024; //modifiy 20171230
-				else
-					DX = 0;
+//				if (DSC)				//modifiy 20180105
+//					DX = S_SET - S1024; //modifiy 20171230
+//				else
+//					DX = 0;
 
-				S1024_Sum = 0;
-			}
-			if (DX <= -2000) //有疑问，当最小是-1500时，没有比它更小的了
-				DX = -2000;
-			else if (DX >= 2000)
-				DX = 2000;
-			//
-			//			Last_DX = DX;
-			//
-			//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/
-			//				Min_DX = DX;
+//				S1024_Sum = 0;
+//			}
+//			if (DX <= -2000) //有疑问，当最小是-1500时，没有比它更小的了
+//				DX = -2000;
+//			else if (DX >= 2000)
+//				DX = 2000;
+//			//
+//			//			Last_DX = DX;
+//			//
+//			//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/
+//			//				Min_DX = DX;
 
-			//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
-		}
-	}
-	else if (displayModeONE_FLAG == 1) /*Area Mode*/
-	{
-		if (RegisterC)
-		{
-			//S1024_Sum = S1024_Sum + S_Final;
-			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
-			S1024_Index++;
-			if (S1024_Index >= S1024_Or_S8192)
-			{
-				S1024_Index = 0;
-				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
-				if (DSC)							//modifiy 20180105
-					DX = S_SET - S1024;				//modifiy 20171230
-				else
-					DX = 0;
-				S1024_Sum = 0;
-			}
-			if (DX <= -2000) //有疑问，当最小是-1500时，没有比它更小的了
-				DX = -2000;
-			else if (DX >= 2000)
-				DX = 2000;
-			//
-			//			Last_DX = DX;
-			//
-			//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/
-			//				Min_DX = DX;
-			//
-			//				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
-		}
-	}
+//			//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
+//		}
+//	}
+//	else if (displayModeONE_FLAG == 1) /*Area Mode*/
+//	{
+//		if (RegisterC)
+//		{
+//			//S1024_Sum = S1024_Sum + S_Final;
+//			S1024_Sum = S1024_Sum + SX_Final[SX_Index];
+//			S1024_Index++;
+//			if (S1024_Index >= S1024_Or_S8192)
+//			{
+//				S1024_Index = 0;
+//				S1024 = S1024_Sum / S1024_Or_S8192; //求得S1024
+//				if (DSC)							//modifiy 20180105
+//					DX = S_SET - S1024;				//modifiy 20171230
+//				else
+//					DX = 0;
+//				S1024_Sum = 0;
+//			}
+//			if (DX <= -2000) //有疑问，当最小是-1500时，没有比它更小的了
+//				DX = -2000;
+//			else if (DX >= 2000)
+//				DX = 2000;
+//			//
+//			//			Last_DX = DX;
+//			//
+//			//			if(Last_DX<Min_DX) 	/*用于记录最小的DX值*/
+//			//				Min_DX = DX;
+//			//
+//			//				//DustFlag = CheckDust(); /*灰层积聚严重，DUST*/
+//		}
+//	}
 }
 
 
@@ -293,6 +294,7 @@ void JudgeTX(void)
 		TX_Sum = TX_Sum + Final_1;
 		if(TX_Index>=65536)
 		{
+			TX_Index = 0;
 			TX = TX_Sum / 65536;
 			TX_Sum = 0;
 		}
@@ -308,7 +310,7 @@ extern int32_t CSV;
 float Max_Threshold = 0;
 float Min_Threshold = 0;
 
-uint8_t DMA_Counter = 0;
+uint32_t DMA_Counter = 0;
 uint8_t RegisterA_1_Counter = 0;
 uint8_t RegisterA_0_Counter = 0;
 uint8_t TempRegisterA = 0;
@@ -321,110 +323,81 @@ void DMA1_Channel1_IRQHandler(void)
 			SA = 4095 - adc_dma_tab[0];
 			SA_Sum = SA_Sum+SA;
 			DMA_ADC_Counter++;
-
 			if (DMA_ADC_Counter >= 4)
 			{
 				DMA_ADC_Counter = 0;
 				Final_1 = SA_Sum / 4;
 				SA_Sum = 0;
-				
-				if(displayModeONE_FLAG==1)	/**AREA模式下，FX=0**/
+				DMA_Counter++;
+				if (DMA_Counter >=1000 )  //用作延时200ms，50us*4次=200us，所以200ms = 200us*1000
 				{
-					FX = 0;
-					TX = 0;
-				}
-				else if(displayModeONE_FLAG==0)/*STD模式下*/
-				{
-					FX = SET_VREF - TX;     /*求FX*/
-					if(FX>=600) FX = 600;		/**FX范围**/
-					else if(FX<=-600) FX = -600;
-				}
-				
-				Final = Final_1 + FX ;  //最终信号值
-				
-				if(Final>=9999)
-						Final = 9999;
-				if(Final<=0)
-						Final = 0;
-				
-				/***************DX*************/
-				
-				DX_Index++;
-				if(Final>=Max_DX)
-					Max_DX = Final;
-				if(Final<=Min_DX)
-					Min_DX = Final;
-				if(DX_Index>6)
-				{
-					DX_Index = 0;
-					DX = Max_DX - Min_DX;
-					Max_DX = 0;    /*初始化变量*/
-					Min_DX = 4095; /*初始化变量*/
-				}
-				
-				/***********Register A**********/
-				if(displayModeONE_FLAG==1)	/**AREA模式**/
-				{
-					if(Final>=LO+2+DX && Final<=HI-2-DX)
-						RegisterA = 1;
-					else if((Final>=0&&Final<=LO-20-LO/128-0.125*DX)||(Final>=HI+20+HI/128+0.125*DX && Final<=9999)) //2018-06-18
-						RegisterA = 0;
-				}
-				else if(displayModeONE_FLAG==0)/**STD模式**/
-				{
-					if(Final>=Threshold+2+DX)  //2018-06-18  TH+2+DX
-						RegisterA = 1;
-					else if(Final<=Threshold-6-Threshold/128-0.125*DX) //2018-06-18 TH-6-TH/128-0.125*DX
-						RegisterA = 0;
-					
-					/******TX******/
-					JudgeTX();
-				}
-				/*****自学习****/
-				if(SelftStudyflag)
-				{
-					//DX = 0;
-					//S1024 = 0;
-					//GetAverage(&S_SET,SX_Final,32); /*自学习，求得S-SET*/
-					//Threshold = S_SET-80;   /*更新阀值*/
-					S_SET = Final;
-
-					if(displayModeONE_FLAG)//区域模式
-					{
-						if(DisplayModeNo==0)
+						if(displayModeONE_FLAG==1 || SelftStudyflag==1 || FX_Flag==0)	/**AREA模式下或者自学习情况下，FX=0，TX=0**/
 						{
-							HI = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/;
-							WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
+							FX = 0;
+							TX = 0;
 						}
-						else if(DisplayModeNo==1)
+						else/*STD模式下*/
+						{					
+							/******TX******/
+							JudgeTX();
+							/*******FX*******/
+							FX = SET_VREF - TX;     /*求FX*/
+							if(FX>=600) FX = 600;		/**FX范围**/
+							else if(FX<=-600) FX = -600;
+						}
+						
+						Final = Final_1 + FX ;  //最终信号值
+						
+						if(Final>=9999)
+								Final = 9999;
+						if(Final<=0)
+								Final = 0;
+						
+						/***************DX*************/
+						
+						DX_Index++;
+						if(Final>=Max_DX)
+							Max_DX = Final;
+						if(Final<=Min_DX)
+							Min_DX = Final;
+						if(DX_Index>6)
 						{
-							LO =S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/;
-							WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
+							DX_Index = 0;
+							DX = Max_DX - Min_DX;
+							Max_DX = 0;    /*初始化变量*/
+							Min_DX = 4095; /*初始化变量*/
 						}
-					}
-					else    //标准模式
-					{
-						Threshold = S_SET*(100-PERCENTAGE)/100;   /*更新阀值,=S-SET*(1-1%)=S-SET*0.99=S-SET*99/100*/
-						WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
-						WriteFlash(SET_VREF_FLASH_DATA_ADDRESS,SET_VREF);
-					}
-					SelftStudyflag = 0;
+						
+						/***********Register A**********/
+						if(displayModeONE_FLAG==1)	/**AREA模式**/
+						{
+							if(Final>=LO+2+DX && Final<=HI-2-DX)
+								RegisterA = 1;
+							else if((Final>=0&&Final<=LO-20-LO/128-0.125*DX)||(Final>=HI+20+HI/128+0.125*DX && Final<=9999)) //2018-06-18
+								RegisterA = 0;
+						}
+						else if(displayModeONE_FLAG==0)/**STD模式**/
+						{
+							if(Final>=Threshold+2+DX)  //2018-06-18  TH+2+DX
+								RegisterA = 1;
+							else if(Final<=Threshold-6-Threshold/128-0.125*DX) //2018-06-18 TH-6-TH/128-0.125*DX
+								RegisterA = 0;
+						}		
 
+				sample_finish = 1;
+
+
+				/*设置OUT1的状态*/
+				SetOUT1Status();
+					/*OUT2输出*/
+				SetOUT2Status();
 					
-				}
+				/*显示OUT1和OUT2的状态*/
+				SMG_DisplayOUT_STATUS(OUT1, OUT2);
 			}
-			
-
-		sample_finish = 1;
-
-
-		/*设置OUT1的状态*/
-		SetOUT1Status();
-			/*OUT2输出*/
-		SetOUT2Status();
-			
-		/*显示OUT1和OUT2的状态*/
-		SMG_DisplayOUT_STATUS(OUT1, OUT2);
+			else 
+				TX = Final_1;   /*200ms前，使用Final_1作为TX*/
+		}
 		DMA_ClearITPendingBit(DMA_IT_TC); //清楚DMA中断标志位
 	}
 }
@@ -1321,7 +1294,6 @@ void SetOUT1Status(void)
 	if (ShortCircuit != 1) /*不是短路保护的情况下才判断OUT1的输出*/
 	{
 		/*同或运算*/
-
 		if (GPIO_ReadInputDataBit(BUTTON_SWITCH_GPIO_Port, BUTTON_SWITCH_Pin))
 			RegisterB = 0;
 		else
@@ -1335,12 +1307,12 @@ void SetOUT1Status(void)
 			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
 				OUT1_Mode.DelayCounter = 0;
-				CPV_Status = 1;
 			}
 			else
 			{
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
 				OUT1_Mode.DelayCounter = 0;
+				CPV_Status = 1;
 			}
 		}
 		/*OFFD*/
@@ -1380,26 +1352,29 @@ void SetOUT1Status(void)
 		/*SHOT*/
 		else if (OUT1_Mode.DelayMode == SHOT)
 		{
-			if (OUT1 == 0 || SHOTflag == 1)
-			{
-				if (OUT1_Mode.DelayCounter < (OUT1_Mode.DelayValue * DealyBaseTime))
-				{
-					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
-					SHOTflag = 1;
-					CPV_Status = 1;
-				}
-				else
-				{
-					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
-					SHOTflag = 0;
-				}
-			}
-			else
+			if (OUT1 == 0 && SHOTflag ==0)
 			{
 				OUT1_Mode.DelayCounter = 0;
 				GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
 			}
+			else if(OUT1 ==1 || SHOTflag == 1)
+			{
+				if (OUT1_Mode.DelayCounter < (OUT1_Mode.DelayValue * DealyBaseTime))
+				{
+					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_SET);
+					SHOTflag = 1;
+					
+				}
+				else
+				{
+					GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
+					SHOTflag = 0;
+					CPV_Status = 1;
+				}
+			}
 		}
+		
+		/*********************CPV**************************/
 			if(LastOUT1 == 0 && OUT1 == 1 && CPV_Status == 1)
 			{
 				CPV++;

@@ -16,10 +16,7 @@
 #include "project.h"
 #include "key.h"
 
-#define timer_period 6 //ms
-#define shortKEY 	100
-#define middleKEY	1000
-#define longKEY		3000
+
 
 //uint32_t key_counter;
 ButtonStruct SetButton;
@@ -41,8 +38,8 @@ void Button_Init(void)
 	SetButton.Status = Release;
 	SetButton.WorkIn = WorkLow;
 	SetButton.Effect = PressNOEffect;
-	SetButton.ShortTime = 1*25;
-	SetButton.LongTime = 20*timer_period;   
+	SetButton.ShortTime = 2*timer_period;
+	SetButton.LongTime = 5*timer_period;   
  
 	ModeButton.ButtonPort = BUTTON_MODE_GPIO_Port;
 	ModeButton.ButtonPin = BUTTON_MODE_Pin;
@@ -52,7 +49,7 @@ void Button_Init(void)
 	ModeButton.Status = Release;
 	ModeButton.WorkIn = WorkLow;
 	ModeButton.Effect = PressNOEffect;
-	ModeButton.ShortTime = 1*timer_period;  
+	ModeButton.ShortTime = 2*timer_period;  
 	ModeButton.LongTime = 20*timer_period;		
 	
 	UpButton.ButtonPort = BUTTON_UP_GPIO_Port;
@@ -63,7 +60,7 @@ void Button_Init(void)
 	UpButton.Status = Release;
 	UpButton.WorkIn = WorkLow;
 	UpButton.Effect = PressNOEffect;
-	UpButton.ShortTime = 1*timer_period;
+	UpButton.ShortTime = 2*timer_period;
 	UpButton.LongTime = 20*timer_period;
 	
 	DownButton.ButtonPort = BUTTON_DOWN_GPIO_Port;
@@ -74,7 +71,7 @@ void Button_Init(void)
 	DownButton.Status = Release;
 	DownButton.WorkIn = WorkLow;
 	DownButton.Effect = PressNOEffect;
-	DownButton.ShortTime = 1*timer_period;
+	DownButton.ShortTime = 2*timer_period;
 	DownButton.LongTime = 20*timer_period;
 	
   gpio_init_structure.GPIO_Mode = GPIO_Mode_IPD;                                 

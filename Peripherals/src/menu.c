@@ -53,7 +53,8 @@ extern uint8_t  displayModeONE_FLAG;
 extern uint32_t tempPress;
 extern uint8_t DX_Flag;
 extern int16_t 	DX;
-extern uint32_t S1024;
+extern uint8_t 	FX_Flag;
+
 void menu(void)
 {
 	static uint8_t lastCounter;
@@ -66,9 +67,9 @@ void menu(void)
 	{
 		while(((ModeButton.Status==Press&&(ModeButton.PressTimer>=ModeButton.LongTime)) || (ModeButton.Effect==PressLong)))//&&DownButton.Status==Release)
 		{
-				DX_Flag = 0;
-				DX = 0;
-				S1024 = 0;
+//				DX_Flag = 0;
+//				DX = 0;
+//				S1024 = 0;
 				ModeButton.PressCounter = 0;
 				UpButton.PressCounter = 0;
 				MenuOne_CSV();
@@ -104,6 +105,7 @@ void menu(void)
 						else 
 							displayModeONE_FLAG=0;
 						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						FX_Flag = 0;    //重新选择菜单后，就不能使用FX，需要重新自学习，才可以启动FX
 					}
 
 					/*Down Button*/
@@ -116,6 +118,7 @@ void menu(void)
 						else 
 							displayModeONE_FLAG=0;
 						WriteFlash(DETECT_FLASH_DATA_ADDRESS,displayModeONE_FLAG);
+						FX_Flag = 0;    //重新选择菜单后，就不能使用FX，需要重新自学习，才可以启动FX
 					}
 				}
 //				

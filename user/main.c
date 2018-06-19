@@ -203,6 +203,7 @@ int main(void)
 		/*程序运行次数检测*/
 		ProgramCheck();
 		/*主要运行函数*/
+		
 		Main_Function();
 	}
 	else

@@ -46,73 +46,9 @@ extern  uint8_t DX_Flag;
 extern uint8_t sample_finish;
 extern int32_t 	SET_VREF;
 extern uint32_t ADC_Display;//ADC显示
+extern uint8_t 	FX_Flag;
 
-void selfstudy(void)
-{
-	uint8_t OUT1_STATUS,OUT2_STATUS;
-	
 
-	if(SetButton.Status == Press && ModeButton.Status==Press)
-	{
-		
-	}
-	else
-	{
-			/*第一次进入SET模式*/
-			while(SetButton.Status == Press )     //只要在显示模式下第一次按下SET按键
-			{	
-				DX_Flag = 0;
-					/*保持OUT1的状态*/
-					OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);/*获取当前的OUT1状态*/
-				GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)OUT1_STATUS);/*保持着OUT1状态*/
-					OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);/*获取当前的OUT2状态*/
-				GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
-
-				/*按着按键3秒内*/
-				SMG_DisplaySET_Step_1_Mode(2,ADC_Display);  //显示SET1和信号值
-				
-				/*第一次SET1，找最大SET1的值*/
-				SelfStudy_SET1();
-				
-				while(SetButton.Effect == PressShort || SetButton.Effect == PressLong) /*按下按键已经超过时间，而且没有释放，闪烁提醒*/
-				{		
-					if(SetButton.Status == Press && SetButton.Effect == PressShort) 
-					{
-						SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
-						SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
-						
-						//DX_Flag = 1;
-						//break;
-					}
-					else if(SetButton.Effect == PressLong && SetButton.Status==Press ) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
-					{	
-						DX_Flag = 0;
-
-						/*一直等待第二次SET的按下*
-						**************************/
-						SetButton.LastCounter = SetButton.PressCounter;
-						SetButton.Effect = PressShort;
-						UpButton.PressCounter=0;
-						UpButton.Effect=PressNOEffect;
-						DownButton.PressCounter=0;
-						DownButton.Effect=PressNOEffect;
-						ModeButton.PressCounter=0;
-						ModeButton.Effect=PressNOEffect;
-						
-						selfDisplayEndFlay =0;
-						//GetMAXADCValue();
-//						while(SetButton.Status==Press)
-//						{
-//							DX_Flag = 1;
-//							SMG_DisplaySET_Step_1_Mode(2,Threshold);
-//							SetButton.Effect = PressShort;
-//						}
-					}
-				}
-				
-			}
-	}
-}
 
 
 /*在一系列的ADCvalue中寻找最大的ADV MAX*/
@@ -121,66 +57,10 @@ int32_t 		NewThreshold=0;
 //int32_t 		S_MaxValue=0;
 int32_t    	S1_MaxValue=0;
 int32_t    	S2_MaxValue=0;
-void SelfStudy_SET2(void) 
-{
-		uint32_t 		TempADCValue=0;
-//		static uint8_t lastCounter;
-//	  S_MaxValue =0;
-		while(selfDisplayEndFlay==0)     //第二次按下SET按键
-		{
-			while(SetButton.Status == Press )
-			{
-					TempADCValue = 	Final ;
-				
-					if(TempADCValue>=S2_MaxValue)   //不断寻找最大值
-					{
-						S2_MaxValue = TempADCValue;
-					}
-					
-				/*这里要显示SET2*/
-				if(EventFlag&Blink500msFlag) 
-				{
-					EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-					SMG_DisplaySET_Step_2_Mode(0,Final,0);
-				}
-				
-				while(SetButton.Effect == PressShort) /*改成了短按*/
-				{	/*3秒到了,闪烁提醒*/
-					if(EventFlag&Blink500msFlag) 
-					{
-						EventFlag = EventFlag &(~Blink500msFlag);  //清楚标志位
-						SMG_DisplaySET_Step_2_Mode(1,0,0);     
-					}				
-					while(SetButton.Effect == PressShort && SetButton.Status == Release) /*按键达到3秒后，结束第二次SET按键*/
-					{		/*3秒到了，并释放了按键*/
-						
-						//NewThreshold = (S_MaxValue*3)/4;  //SMAX的3/4作为阈值
-						if(NewThreshold<=20) NewThreshold=20;
-						if(NewThreshold>=4095) NewThreshold=4095;
-						
-						GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin));
-						GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin));
-						
-						
-						if(S1_MaxValue>S2_MaxValue)  /*SET_VREF为SET1和SET2中较大的值*/
-							SET_VREF = S1_MaxValue;
-						else 
-							SET_VREF = S2_MaxValue;
-						
-						Threshold = NewThreshold;
-						SelftStudyflag = 1;
-						selfDisplayEndFlay = 1;
-						SetButton.PressCounter = 0;					/*清楚按键次数*/
-						SetButton.Status = Release;					/*释放按键*/
-						SetButton.Effect = PressNOEffect;
-
-						WriteFlash(Threshold_FLASH_DATA_ADDRESS,NewThreshold);
-						WriteFlash(SET_VREF_FLASH_DATA_ADDRESS,SET_VREF);
-							}
-					}
-				}
-			}
-}
+extern uint8_t displayModeONE_FLAG ;
+extern uint8_t DisplayModeNo;
+extern int16_t HI ;
+extern int16_t LO ;
 
 /*ADCIN的数据调零*/
 
@@ -188,6 +68,139 @@ extern uint8_t S_Final_FinishFlag;
 extern uint32_t 	S[4];
 extern uint32_t 	S_Final;
 
+void SelfStudy_End(void);
+
+void selfstudy(void)
+{
+	uint8_t OUT1_STATUS,OUT2_STATUS;
+	
+
+	if(SetButton.Status == Press && ModeButton.Status==Press)
+	{
+
+	}
+	else
+	{
+			/*第一次进入SET模式*/
+			while(SetButton.Status == Press && SetButton.PressTimer >= SetButton.LongTime)     //只要在显示模式下第一次按下SET按键
+			{	
+				SelftStudyflag = 1; //标记进入自学习状态
+				sample_finish = 0;  //清除采样结束标记
+					/*保持OUT1的状态*/
+				OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);/*获取当前的OUT1状态*/
+				GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)OUT1_STATUS);/*保持着OUT1状态*/
+				OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);/*获取当前的OUT2状态*/
+				GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
+
+				SelfStudy_SET1();
+				SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
+				
+				while(SetButton.PressCounter==1)
+				{				
+				SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
+				} //等待Set按键释放
+				
+				while(SetButton.PressCounter==2)	
+				{	
+					SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
+					SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
+				}
+
+					if(SetButton.PressCounter>=3) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
+					{
+						
+						SelfStudy_End();
+						
+						FX_Flag = 1;  //结束自学习，重启FX
+						/*一直等待第二次SET的按下*
+						**************************/
+						SetButton.LastCounter = SetButton.PressCounter;
+						SetButton.PressCounter = 0;
+						SetButton.Effect = PressNOEffect;
+						UpButton.PressCounter=0;
+						UpButton.Effect=PressNOEffect;
+						DownButton.PressCounter=0;
+						DownButton.Effect=PressNOEffect;
+						ModeButton.PressCounter=0;
+						ModeButton.Effect=PressNOEffect;
+						
+						selfDisplayEndFlay =0;
+						SelftStudyflag = 0;//清除自学习标记-- 结束了自学习
+					}
+				
+			}
+	}
+}
+
+
+
+
+
+void SelfStudy_End(void)
+{					
+	int32_t S_SET = 0;
+
+			S_SET = Final;
+
+			if(displayModeONE_FLAG)//区域模式
+			{
+				if(DisplayModeNo==0)
+				{
+					HI = S_SET;   
+					WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
+				}
+				else if(DisplayModeNo==1)
+				{
+					LO = S_SET;  
+					WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
+				}
+			}
+			else    //标准模式
+			{
+				NewThreshold = S_SET; 
+
+				if(NewThreshold<=20) NewThreshold=20;
+				if(NewThreshold>=4095) NewThreshold=4095;	
+
+				Threshold = NewThreshold;
+				WriteFlash(Threshold_FLASH_DATA_ADDRESS,Threshold);
+			}
+		
+		GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin));
+		GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin));
+		
+		
+		if(S1_MaxValue <= S2_MaxValue)  /*SET_VREF为SET1和SET2中较小的值*/
+			SET_VREF = S1_MaxValue;
+		else 
+			SET_VREF = S2_MaxValue;
+		
+		Threshold = NewThreshold;
+		
+		selfDisplayEndFlay = 1;
+		SetButton.PressCounter = 0;					/*清楚按键次数*/
+		SetButton.Status = Release;					/*释放按键*/
+		SetButton.Effect = PressNOEffect;
+		
+		WriteFlash(SET_VREF_FLASH_DATA_ADDRESS,SET_VREF);
+}
+
+void SelfStudy_SET2(void) 
+{
+		uint32_t 		SET2_ADCValue=0;
+		
+		if(sample_finish)
+		{
+				sample_finish = 0;
+
+				SET2_ADCValue = 	Final ;
+				
+				if(SET2_ADCValue>=S1_MaxValue)   //不断寻找最大值
+				{
+					S1_MaxValue = SET2_ADCValue;
+				}
+	}
+}
 
 /*获取四个ADC通道采样后，求平均的值*/
 uint8_t  JudgeSvalue(uint32_t *S_Value)

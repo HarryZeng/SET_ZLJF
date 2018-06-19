@@ -148,6 +148,11 @@ void IO_GPIO_INIT(void)
     gpio_init_structure.GPIO_Mode = GPIO_Mode_Out_PP;             
     gpio_init_structure.GPIO_Speed = GPIO_Speed_50MHz;                               
 		GPIO_Init(GPIOA, &gpio_init_structure);
+		
+//		gpio_init_structure.GPIO_Pin = GPIO_Pin_1;  
+//    gpio_init_structure.GPIO_Mode = GPIO_Mode_AF_OD;             
+//    gpio_init_structure.GPIO_Speed = GPIO_Speed_50MHz;                               
+//		GPIO_Init(GPIOB, &gpio_init_structure);		
 
 		//COMP_OUT1_GPIO_Port
     gpio_init_structure.GPIO_Pin = COMP_OUT1_Pin;  
