@@ -31,7 +31,7 @@ uint32_t DealyBaseTime = 8;
 uint16_t DEL = 50;
 
 int16_t HI = 1000;
-int16_t LO = 700;
+int16_t LO = 500;
 bool timeflag = 0;
 uint8_t LastOUT1 = 1;
 uint8_t RegisterA = 0;
@@ -334,7 +334,7 @@ void DMA1_Channel1_IRQHandler(void)
 						if(displayModeONE_FLAG==1 || SelftStudyflag==1 || FX_Flag==0)	/**AREA模式下或者自学习情况下，FX=0，TX=0**/
 						{
 							FX = 0;
-							TX = 0;
+							//TX = 0;
 						}
 						else/*STD模式下*/
 						{					
@@ -346,7 +346,7 @@ void DMA1_Channel1_IRQHandler(void)
 							else if(FX<=-600) FX = -600;
 						}
 						
-						Final = Final_1 + FX ;  //最终信号值
+						Final = Final_1 - FX ;  //最终信号值
 						
 						if(Final>=9999)
 								Final = 9999;
@@ -380,7 +380,7 @@ void DMA1_Channel1_IRQHandler(void)
 						{
 							if(Final>=Threshold+2+DX)  //2018-06-18  TH+2+DX
 								RegisterA = 1;
-							else if(Final<=Threshold-6-Threshold/128-0.125*DX) //2018-06-18 TH-6-TH/128-0.125*DX
+							else if(Final<=Threshold-4-Threshold/128-0.125*DX) //2018-06-19 TH-4-TH/128-0.125*DX
 								RegisterA = 0;
 						}		
 
@@ -1605,20 +1605,25 @@ void GetEEPROM(void)
 ****************************/
 void ResetParameter(void)
 {
-	CSV = 1000;
-	Threshold = 300;
+	CSV = 10;
+	Threshold = 1000;
 	KEY = ULOC;
 	OUT1_Mode.DelayMode = TOFF;
 	OUT1_Mode.DelayValue = 10;
 	ATT100 = 100;
 	DEL = 4;
 	RegisterB = 1;
-	HI = 300;
-	LO = 100;
+	HI = 1000;
+	LO = 500;
 	displayModeONE_FLAG = 0;
 	PERCENTAGE = 1;
 	DSC = 1;
-
+	
+	TX = SET_VREF;
+	TX_Sum=0;
+	TX_Index = 0;
+	FX = 0;
+	
 	WriteFlash(OUT1_Mode_FLASH_DATA_ADDRESS, OUT1_Mode.DelayMode);
 	Test_Delay(50);
 	WriteFlash(OUT1_Value_FLASH_DATA_ADDRESS, OUT1_Mode.DelayValue);

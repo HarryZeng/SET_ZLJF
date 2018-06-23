@@ -21,7 +21,7 @@
 #include "selfstudy.h"
 
 extern uint16_t DEL;
-int32_t CSV = 1000;
+int32_t CSV = 10;
 int32_t SV = 900; 		/*½Ó½üfinal Value*/
 uint16_t FSV = 1000;	/*FINAL SET VALUE*/
 int16_t ATT100=100;

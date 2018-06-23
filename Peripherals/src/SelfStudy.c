@@ -61,12 +61,15 @@ extern uint8_t displayModeONE_FLAG ;
 extern uint8_t DisplayModeNo;
 extern int16_t HI ;
 extern int16_t LO ;
-
+extern int32_t TX;
 /*ADCIN的数据调零*/
 
 extern uint8_t S_Final_FinishFlag;
 extern uint32_t 	S[4];
 extern uint32_t 	S_Final;
+extern int32_t TX_Sum;
+extern int32_t TX_Index;
+extern float Final_1;
 
 void SelfStudy_End(void);
 
@@ -77,7 +80,7 @@ void selfstudy(void)
 
 	if(SetButton.Status == Press && ModeButton.Status==Press)
 	{
-
+			
 	}
 	else
 	{
@@ -96,19 +99,18 @@ void selfstudy(void)
 				SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
 				
 				while(SetButton.PressCounter==1)
-				{				
-				SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
+				{
+					SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
 				} //等待Set按键释放
 				
-				while(SetButton.PressCounter==2)	
-				{	
-					SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
-					SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
-				}
+//				while(SetButton.PressCounter==2)	
+//				{
+//				}
 
-					if(SetButton.PressCounter>=3) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
+					if(SetButton.PressCounter>=2) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
 					{
-						
+						SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
+						SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
 						SelfStudy_End();
 						
 						FX_Flag = 1;  //结束自学习，重启FX
@@ -121,14 +123,13 @@ void selfstudy(void)
 						UpButton.Effect=PressNOEffect;
 						DownButton.PressCounter=0;
 						DownButton.Effect=PressNOEffect;
-						ModeButton.PressCounter=0;
 						ModeButton.Effect=PressNOEffect;
-						
 						selfDisplayEndFlay =0;
 						SelftStudyflag = 0;//清除自学习标记-- 结束了自学习
 					}
 				
 			}
+			SetButton.PressCounter = 0;
 	}
 }
 
@@ -146,18 +147,20 @@ void SelfStudy_End(void)
 			{
 				if(DisplayModeNo==0)
 				{
-					HI = S_SET;   
+					HI = S_SET; 
+					ModeButton.PressCounter	= 0;				
 					WriteFlash(HI_FLASH_DATA_ADDRESS,HI);
 				}
 				else if(DisplayModeNo==1)
 				{
-					LO = S_SET;  
+					LO = S_SET; 
+					ModeButton.PressCounter	= 1;	
 					WriteFlash(LO_FLASH_DATA_ADDRESS,LO);
 				}
 			}
 			else    //标准模式
 			{
-				NewThreshold = S_SET; 
+				NewThreshold = (S1_MaxValue+S2_MaxValue)/2; 
 
 				if(NewThreshold<=20) NewThreshold=20;
 				if(NewThreshold>=4095) NewThreshold=4095;	
@@ -175,6 +178,9 @@ void SelfStudy_End(void)
 		else 
 			SET_VREF = S2_MaxValue;
 		
+		TX = SET_VREF;
+		TX_Sum=0;
+		TX_Index = 0;
 		Threshold = NewThreshold;
 		
 		selfDisplayEndFlay = 1;
@@ -189,17 +195,13 @@ void SelfStudy_SET2(void)
 {
 		uint32_t 		SET2_ADCValue=0;
 		
-		if(sample_finish)
-		{
-				sample_finish = 0;
 
-				SET2_ADCValue = 	Final ;
-				
-				if(SET2_ADCValue>=S1_MaxValue)   //不断寻找最大值
-				{
-					S1_MaxValue = SET2_ADCValue;
-				}
-	}
+		S2_MaxValue = 	Final_1 ;
+		
+//		if(SET2_ADCValue>=S2_MaxValue)   //不断寻找最大值
+//		{
+//			S2_MaxValue = SET2_ADCValue;
+//		}
 }
 
 /*获取四个ADC通道采样后，求平均的值*/
@@ -257,12 +259,12 @@ void SelfStudy_SET1(void)
 //			DAC_SoftwareTriggerCmd(DAC_Channel_2,ENABLE);
 //			
 
-				SET1_ADCValue = 	Final ;
+				S1_MaxValue = 	Final_1 ;
 				
-				if(SET1_ADCValue>=S1_MaxValue)   //不断寻找最大值
-				{
-					S1_MaxValue = SET1_ADCValue;
-				}
+//				if(SET1_ADCValue>=S1_MaxValue)   //不断寻找最大值
+//				{
+//					S1_MaxValue = SET1_ADCValue;
+//				}
 
 	}
 }

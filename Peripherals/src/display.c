@@ -878,7 +878,7 @@ void SMG_DisplaySET_Step_1_Mode(int16_t modeflag,uint32_t ADCINvalue)
 			/*ÉÁË¸Ð§¹û*/
 			if(bilinkflag)
 			{
-				SMG_data_Decode_table[0][4]=data_SMG_seg_table[1];								//D5	1
+				SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];								//D5	1
 				SMG_data_Decode_table[0][5]=data_SMG_seg_table[21];								//D6	t
 				SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];								//D7	E
 				SMG_data_Decode_table[0][7]=data_SMG_seg_table[20];								//D8	s	
