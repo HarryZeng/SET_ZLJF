@@ -26,6 +26,6 @@
 "..\output\project.o"
 "..\output\bsp_init.o"
 --strict --scatter "..\Output\SET_ZLJF_STM32F100.sct"
---summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "..\Listing\SET_ZLJF_STM32F100.map" -o ..\Output\SET_ZLJF_STM32F100.axf

@@ -57,6 +57,8 @@ int32_t 		NewThreshold=0;
 //int32_t 		S_MaxValue=0;
 int32_t    	S1_MaxValue=0;
 int32_t    	S2_MaxValue=0;
+int32_t    	S1_SumValue=0;
+int32_t    	S2_SumValue=0;
 extern uint8_t displayModeONE_FLAG ;
 extern uint8_t DisplayModeNo;
 extern int16_t HI ;
@@ -70,6 +72,7 @@ extern uint32_t 	S_Final;
 extern int32_t TX_Sum;
 extern int32_t TX_Index;
 extern float Final_1;
+extern int32_t TX_Temp[4];
 
 void SelfStudy_End(void);
 
@@ -96,11 +99,11 @@ void selfstudy(void)
 				GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
 
 				SelfStudy_SET1();
-				SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
+				SMG_DisplaySET_Step_1_Mode(2,Final_1);  //显示SET1和信号值  //2018-7-11->Final_1显示信号值
 				
 				while(SetButton.PressCounter==1)
 				{
-					SMG_DisplaySET_Step_1_Mode(2,S1_MaxValue);  //显示SET1和信号值
+					SMG_DisplaySET_Step_1_Mode(2,Final_1);  //显示SET1和信号值  //2018-7-11->Final_1显示信号值
 				} //等待Set按键释放
 				
 //				while(SetButton.PressCounter==2)	
@@ -109,9 +112,9 @@ void selfstudy(void)
 
 					if(SetButton.PressCounter>=2) /*按键达到3秒后，第一次进入自学习，等待第二次按下SET 3秒*/
 					{
-						SelfStudy_SET2();/*按下的三秒钟内，不断查找最大值*/
-						SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
+						SelfStudy_SET2();
 						SelfStudy_End();
+						SMG_DisplaySET_Step_2_Mode(2,0,Threshold);  //显示SET2和阈值
 						
 						FX_Flag = 1;  //结束自学习，重启FX
 						/*一直等待第二次SET的按下*
@@ -141,7 +144,7 @@ void SelfStudy_End(void)
 {					
 	int32_t S_SET = 0;
 
-			S_SET = Final;
+			S_SET = Final_1;
 
 			if(displayModeONE_FLAG)//区域模式
 			{
@@ -160,7 +163,7 @@ void SelfStudy_End(void)
 			}
 			else    //标准模式
 			{
-				NewThreshold = (S1_MaxValue+S2_MaxValue)/2; 
+				NewThreshold = (S1_MaxValue + S2_MaxValue)/2; 
 
 				if(NewThreshold<=20) NewThreshold=20;
 				if(NewThreshold>=4095) NewThreshold=4095;	
@@ -178,9 +181,13 @@ void SelfStudy_End(void)
 		else 
 			SET_VREF = S2_MaxValue;
 		
-		TX = SET_VREF;
-		TX_Sum=0;
-		TX_Index = 0;
+		//TX = SET_VREF;
+		//TX_Sum=0;
+		//TX_Index = 0;
+//		TX_Temp[0] = 0;
+//		TX_Temp[1] = 0;
+//		TX_Temp[2] = 0;
+//		TX_Temp[3] = 0;
 		Threshold = NewThreshold;
 		
 		selfDisplayEndFlay = 1;
@@ -193,10 +200,11 @@ void SelfStudy_End(void)
 
 void SelfStudy_SET2(void) 
 {
-		uint32_t 		SET2_ADCValue=0;
-		
-
-		S2_MaxValue = 	Final_1 ;
+		if(sample_finish)
+		{
+			sample_finish = 0;
+			S2_MaxValue = 	Final_1 ;     //2018-7-12  直接取Final_1
+		}
 		
 //		if(SET2_ADCValue>=S2_MaxValue)   //不断寻找最大值
 //		{
@@ -230,42 +238,15 @@ uint8_t  JudgeSvalue(uint32_t *S_Value)
 
 void SelfStudy_SET1(void) 
 {
-		uint32_t 		SET1_ADCValue=0;
-
-//	while(CalibrateS1Value>=1400 || CalibrateS1Value<=1000 || CalibrateS2Value>=1400 || CalibrateS2Value<=1000)
-//	{
 		if(sample_finish)
 		{
 			sample_finish = 0;
-
-//			Get_S1_Value(&CalibrateS1Value);					//定时ADC采样
-//			DACOUT1 = CalibrateS1Value;
-//			
-//			if(DACOUT1>=4095)
-//				DACOUT1 = 4095;
-//			else if(DACOUT1<=0)
-//				DACOUT1 = 0;
-//			DAC_SetChannel1Data(DAC_Align_12b_R,(uint16_t)DACOUT1);
-//			DAC_SoftwareTriggerCmd(DAC_Channel_1,ENABLE);
-//			/*******************************************************/
-//			Get_S2_Value(&CalibrateS2Value);					//定时ADC采样
-
-//			DACOUT2 = CalibrateS2Value;
-//			if(DACOUT2>=4095)
-//				DACOUT2 = 4095;
-//			else if(DACOUT2<=0)
-//				DACOUT2 = 0;
-//			DAC_SetChannel2Data(DAC_Align_12b_R,(uint16_t)DACOUT2);
-//			DAC_SoftwareTriggerCmd(DAC_Channel_2,ENABLE);
-//			
-
-				S1_MaxValue = 	Final_1 ;
+			S1_MaxValue = 	Final_1 ;     //2018-7-12  直接取Final_1
+		}
 				
 //				if(SET1_ADCValue>=S1_MaxValue)   //不断寻找最大值
 //				{
 //					S1_MaxValue = SET1_ADCValue;
 //				}
-
-	}
 }
 

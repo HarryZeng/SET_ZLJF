@@ -86,8 +86,8 @@ void Button_Init(void)
 	gpio_init_structure.GPIO_Pin = ModeButton.ButtonPin; 
 	GPIO_Init(ModeButton.ButtonPort, &gpio_init_structure);
 	
-//	gpio_init_structure.GPIO_Pin = SetButton.ButtonPin; 
-//	GPIO_Init(SetButton.ButtonPort, &gpio_init_structure);
+	gpio_init_structure.GPIO_Pin = BUTTON_SWITCH_Pin; 
+	GPIO_Init(BUTTON_SWITCH_GPIO_Port, &gpio_init_structure);	
 //	
 }
 

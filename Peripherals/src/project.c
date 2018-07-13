@@ -121,6 +121,7 @@ uint8_t DX_Flag = 1;
 
 int32_t TX_Index = 0;
 int32_t TX = 0;
+int32_t TX_Temp[4]={4096,4096,4096,4096};
 int32_t TX_Sum=0;
 
 int32_t 	SET_VREF = 0;
@@ -285,19 +286,41 @@ void JudgeDX(void)
 //	}
 }
 
+/*冒泡排序*/
+void bubbleSort(int *arr, int n) 
+{
+	int i;
+	int j;
+	int temp;
+	for ( i= 0; i<n - 1; i++)
+			for (j = 0; j < n - i - 1; j++)
+			{
+					if (arr[j] > arr[j + 1]) 
+					{
+							temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp;
+					}
+			}
+}
+
 
 void JudgeTX(void)
 {
 	if(RegisterA==0)
 	{
-		TX_Index++;
-		TX_Sum = TX_Sum + Final_1;
-		if(TX_Index>=65536)
-		{
-			TX_Index = 0;
-			TX = TX_Sum / 65536;
-			TX_Sum = 0;
-		}
+		if(TX_Temp[0]>Final_1)
+			TX_Temp[0] = Final_1;
+		else if(TX_Temp[1]>Final_1)
+			TX_Temp[1] = Final_1;
+		else if(TX_Temp[2]>Final_1)
+			TX_Temp[2] = Final_1;
+		else if(TX_Temp[3]>Final_1)
+			TX_Temp[3] = Final_1;
+
+		TX_Sum = TX_Temp[0]+TX_Temp[1]+TX_Temp[2]+TX_Temp[3];
+		//TX_Index = 0;
+		TX = TX_Sum / 4;
+		TX_Sum = 0;
+	
 	}
 }
 
@@ -316,6 +339,7 @@ uint8_t RegisterA_0_Counter = 0;
 uint8_t TempRegisterA = 0;
 int16_t DMA_ADC_Counter = 0;
 uint8_t CheckCounter = 0;
+uint8_t StartFlag=0;
 void DMA1_Channel1_IRQHandler(void)
 {
 	if (DMA_GetITStatus(DMA_IT_TC)) //判断DMA传输完成中断
@@ -329,9 +353,9 @@ void DMA1_Channel1_IRQHandler(void)
 				Final_1 = SA_Sum / 4;
 				SA_Sum = 0;
 				DMA_Counter++;
-				if (DMA_Counter >=1000 )  //用作延时200ms，50us*4次=200us，所以200ms = 200us*1000
+				if (StartFlag==1)  //用作延时200ms，50us*4次=200us，所以200ms = 200us*1000
 				{
-						if(displayModeONE_FLAG==1 || SelftStudyflag==1 || FX_Flag==0)	/**AREA模式下或者自学习情况下，FX=0，TX=0**/
+						if(displayModeONE_FLAG==1 || FX_Flag==0)	/**AREA模式下或者自学习情况下，FX=0，TX=0**/  //2018-7-12 去掉|| SelftStudyflag==1 
 						{
 							FX = 0;
 							//TX = 0;
@@ -396,7 +420,14 @@ void DMA1_Channel1_IRQHandler(void)
 				SMG_DisplayOUT_STATUS(OUT1, OUT2);
 			}
 			else 
-				TX = Final_1;   /*200ms前，使用Final_1作为TX*/
+			{
+				JudgeTX();//TX = Final_1;   /*200ms前，使用Final_1作为TX*/ 2018-7-11修改成JudgeTX();
+				if(DMA_Counter >=1000)
+				{
+					StartFlag = 1;
+					FX = SET_VREF;
+				}
+			}
 		}
 		DMA_ClearITPendingBit(DMA_IT_TC); //清楚DMA中断标志位
 	}
