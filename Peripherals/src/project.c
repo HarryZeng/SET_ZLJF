@@ -21,9 +21,9 @@
 #include "SelfStudy.h"
 #include "menu.h"
 #include "flash.h"
-#include "stm32f10x_dma.h"
-#include "stm32f10x_tim.h"
-#include "stm32f10x_dac.h"
+#include "stm32f0xx_dma.h"
+#include "stm32f0xx_tim.h"
+#include "stm32f0xx_dac.h"
 
 /*DSP库宏定义：ARM_MATH_CM0*/
 
@@ -52,13 +52,13 @@ int32_t DACOUT2 = 1000;
 uint32_t CPV = 0;
 
 Button_STATUS KEY = ULOC;
-uint8_t ConfirmShortCircuit = 0;
-uint32_t ShortCircuitCounter = 0;
-uint32_t ShortCircuitLastTime = 0;
+//uint8_t ConfirmShortCircuit = 0;
+//uint32_t ShortCircuitCounter = 0;
+//uint32_t ShortCircuitLastTime = 0;
 uint8_t KeyMappingFlag = 0;
 uint8_t EventFlag = 0x00;
 uint8_t ShortCircuit = 0;
-uint32_t ShortCircuitTimer = 0;
+//uint32_t ShortCircuitTimer = 0;
 uint8_t displayModeONE_FLAG = 0;
 uint8_t DisplayModeNo = 0;
 
@@ -128,34 +128,34 @@ int32_t 	SET_VREF = 0;
 int16_t 	FX = 0;
 uint8_t 	FX_Flag = 1;
 
-uint32_t Display_Signal[256];
-uint32_t Display_Signal_Index = 0;
-uint32_t Display_Signal_Flag = 0;
-uint32_t DisplayADCValue_Sum = 0;
-/*去除最大最小值后剩下的数据求平均*/
-uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary, uint8_t Length, uint32_t *Max, uint32_t *Min)
-{
-	int j;
-	uint32_t Sum = 0;
-	*Max = ary[0];
-	*Min = ary[0];
+//uint32_t Display_Signal[256];
+//uint32_t Display_Signal_Index = 0;
+//uint32_t Display_Signal_Flag = 0;
+//uint32_t DisplayADCValue_Sum = 0;
+///*去除最大最小值后剩下的数据求平均*/
+//uint32_t DeleteMaxAndMinGetAverage(uint32_t *ary, uint8_t Length, uint32_t *Max, uint32_t *Min)
+//{
+//	int j;
+//	uint32_t Sum = 0;
+//	*Max = ary[0];
+//	*Min = ary[0];
 
-	for (j = 1; j < Length; j++)
-	{
-		if (*Max < ary[j])
-			*Max = ary[j];
+//	for (j = 1; j < Length; j++)
+//	{
+//		if (*Max < ary[j])
+//			*Max = ary[j];
 
-		if (*Min > ary[j])
-			*Min = ary[j];
-	}
+//		if (*Min > ary[j])
+//			*Min = ary[j];
+//	}
 
-	for (j = 0; j < Length; j++)
-	{
-		Sum += ary[j];
-	}
-	//return (Sum-*Max-*Min)/(Length-2);
-	return (Sum) / (Length);
-}
+//	for (j = 0; j < Length; j++)
+//	{
+//		Sum += ary[j];
+//	}
+//	//return (Sum-*Max-*Min)/(Length-2);
+//	return (Sum) / (Length);
+//}
 /*求总和*/
 void GetSum(uint32_t *SUM, uint32_t *arry, uint8_t arryLength)
 {
@@ -178,44 +178,44 @@ void GetAverage(uint32_t *Average, uint32_t *arry, uint8_t arryLength)
 	*Average = sum / j;
 }
 
-/*清零函数*/
-void ClearData(uint32_t *ary, uint8_t Length)
-{
-	int j;
-	for (j = 0; j < Length; j++)
-	{
-		*ary = 0x00;
-		ary++; /*指针移位*/
-	}
-}
+///*清零函数*/
+//void ClearData(uint32_t *ary, uint8_t Length)
+//{
+//	int j;
+//	for (j = 0; j < Length; j++)
+//	{
+//		*ary = 0x00;
+//		ary++; /*指针移位*/
+//	}
+//}
 
-/*记录CPV并设置OUT的输出*/
-void CPV_SET_OUT(void)
-{
-	//uint8_t OUT1_LED,OUT2_LED,OUT3_LED;
-	if (LastOUT1 == 0 && OUT1 == 1)
-	{
-		CPV++;
-		if (CPV >= SV) /*如果计数器达到预先设定的SV，清零，OUT2输出一个高电平*/
-		{
-			OUT2 = 1;
-			//CPV = 0;
-		}
-		if (CPV >= FSV) /*如果计数器达到预先设定的FSV，清零，OUT3输出一个高电平*/
-		{
-			OUT3 = 1;
-			CPV = 0;
-		}
-	}
-	LastOUT1 = OUT1;
-	//		/*显示OUT1和OUT2的状态*/
-	SMG_DisplayOUT_STATUS(OUT1, OUT2);
-}
+///*记录CPV并设置OUT的输出*/
+//void CPV_SET_OUT(void)
+//{
+//	//uint8_t OUT1_LED,OUT2_LED,OUT3_LED;
+//	if (LastOUT1 == 0 && OUT1 == 1)
+//	{
+//		CPV++;
+//		if (CPV >= SV) /*如果计数器达到预先设定的SV，清零，OUT2输出一个高电平*/
+//		{
+//			OUT2 = 1;
+//			//CPV = 0;
+//		}
+//		if (CPV >= FSV) /*如果计数器达到预先设定的FSV，清零，OUT3输出一个高电平*/
+//		{
+//			OUT3 = 1;
+//			CPV = 0;
+//		}
+//	}
+//	LastOUT1 = OUT1;
+//	//		/*显示OUT1和OUT2的状态*/
+//	SMG_DisplayOUT_STATUS(OUT1, OUT2);
+//}
 
-uint8_t PWMCounter = 0;
-uint32_t S1024 = 0;
-uint16_t S1024_Index = 0;
-uint32_t S1024_Sum = 0;
+//uint8_t PWMCounter = 0;
+//uint32_t S1024 = 0;
+//uint16_t S1024_Index = 0;
+//uint32_t S1024_Sum = 0;
 
 #define S1024_Or_S8192 1024
 void JudgeDX(void)
@@ -286,21 +286,21 @@ void JudgeDX(void)
 //	}
 }
 
-/*冒泡排序*/
-void bubbleSort(int *arr, int n) 
-{
-	int i;
-	int j;
-	int temp;
-	for ( i= 0; i<n - 1; i++)
-			for (j = 0; j < n - i - 1; j++)
-			{
-					if (arr[j] > arr[j + 1]) 
-					{
-							temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp;
-					}
-			}
-}
+///*冒泡排序*/
+//void bubbleSort(int *arr, int n) 
+//{
+//	int i;
+//	int j;
+//	int temp;
+//	for ( i= 0; i<n - 1; i++)
+//			for (j = 0; j < n - i - 1; j++)
+//			{
+//					if (arr[j] > arr[j + 1]) 
+//					{
+//							temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp;
+//					}
+//			}
+//}
 
 
 void JudgeTX(void)
@@ -324,14 +324,8 @@ void JudgeTX(void)
 	}
 }
 
-uint16_t RunCounter[100];
-uint8_t Runflag = 0;
-uint8_t RunIndex = 0;
 uint8_t sample_finish = 0;
 extern int32_t CSV;
-/*DD61-TWO-DAC funtion*/
-float Max_Threshold = 0;
-float Min_Threshold = 0;
 
 uint32_t DMA_Counter = 0;
 uint8_t RegisterA_1_Counter = 0;
@@ -611,40 +605,40 @@ void GetTotalADCValue(void)
 	ADC_Display = Final;
 }
 
-void Get_SA_Value(uint32_t *SAvalue)
-{
-	/*正常显示*/
-	//*SAvalue = SA_Final;
-}
+//void Get_SA_Value(uint32_t *SAvalue)
+//{
+//	/*正常显示*/
+//	//*SAvalue = SA_Final;
+//}
 
-void Get_SB_Value(uint32_t *SBvalue)
-{
-	/*正常显示*/
-	//*SBvalue =SB_Final;
-}
+//void Get_SB_Value(uint32_t *SBvalue)
+//{
+//	/*正常显示*/
+//	//*SBvalue =SB_Final;
+//}
 
-void Get_S1_Value(uint32_t *S1value)
-{
-	/*正常显示*/
-	//*S1value =S1_Final;
-}
-void Get_S2_Value(uint32_t *S2value)
-{
-	/*正常显示*/
-	//*S2value =S2_Final;
-}
+//void Get_S1_Value(uint32_t *S1value)
+//{
+//	/*正常显示*/
+//	//*S1value =S1_Final;
+//}
+//void Get_S2_Value(uint32_t *S2value)
+//{
+//	/*正常显示*/
+//	//*S2value =S2_Final;
+//}
 
-uint16_t Dac1_Get_Vol(void)
-{
-	return DAC_GetDataOutputValue(DAC_Channel_2);
-}
+//uint16_t Dac1_Get_Vol(void)
+//{
+//	return DAC_GetDataOutputValue(DAC_Channel_2);
+//}
 
 uint16_t RealDACOUT = 0;
 
 void Main_Function(void)
 {
 	GetEEPROM();
-	//ATTSet(ATT100);
+	
 	while (1)
 	{
 		if (0)
@@ -1325,10 +1319,10 @@ void SetOUT1Status(void)
 	if (ShortCircuit != 1) /*不是短路保护的情况下才判断OUT1的输出*/
 	{
 		/*同或运算*/
-		if (GPIO_ReadInputDataBit(BUTTON_SWITCH_GPIO_Port, BUTTON_SWITCH_Pin))
-			RegisterB = 0;
-		else
-			RegisterB = 1;
+//		if (GPIO_ReadInputDataBit(BUTTON_SWITCH_GPIO_Port, BUTTON_SWITCH_Pin))
+//			RegisterB = 0;
+//		else
+//			RegisterB = 1;
 
 		OUT1 = !(RegisterB ^ RegisterA);
 		if (OUT1_Mode.DelayMode == TOFF)
@@ -1430,13 +1424,13 @@ void SetOUT2Status(void)
 	{
 		if (OUT2)
 		{
-			GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_SET); /*拉高*/
+			//GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_SET); /*拉高*/
 		}
 		if (OUT2_TimerCounter >= 80)
 		{
 			OUT2 = 0;
 			OUT2_TimerCounter = 0;								/*获取当前时间*/
-			GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_RESET); /*80ms后拉低*/
+			//GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_RESET); /*80ms后拉低*/
 		}
 	}
 }
@@ -1470,31 +1464,31 @@ void SetOUT3Status(void)
 *******************************/
 void ShortCircuitProtection(void)
 {
-	uint8_t SCState;
+//	uint8_t SCState;
 
-	/*读取SC引脚的状态*/
-	if (ShortCircuit != 1)
-	{
-		//SCState = GPIO_ReadInputDataBit(SC_GPIO_Port ,SC_Pin);
-		if ((BitAction)SCState == Bit_RESET)
-		{
-			/*拉低FB_SC*/
-			ShortCircuit = 1;
-		}
-		else
-		{
-			ShortCircuit = 0;
-			ConfirmShortCircuit = 0;
-		}
-	}
-	if (ShortCircuit && ShortCircuitCounter >= 100)
-	{
-		ConfirmShortCircuit = 1;
-		GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
-		GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_RESET); /*马上拉低OUT*/
-		//GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*马上拉低OUT*/
-		ShortCircuitTimer = ShortCircuitLastTime;
-	}
+//	/*读取SC引脚的状态*/
+//	if (ShortCircuit != 1)
+//	{
+//		//SCState = GPIO_ReadInputDataBit(SC_GPIO_Port ,SC_Pin);
+//		if ((BitAction)SCState == Bit_RESET)
+//		{
+//			/*拉低FB_SC*/
+//			ShortCircuit = 1;
+//		}
+//		else
+//		{
+//			ShortCircuit = 0;
+//			ConfirmShortCircuit = 0;
+//		}
+//	}
+//	if (ShortCircuit && ShortCircuitCounter >= 100)
+//	{
+//		ConfirmShortCircuit = 1;
+//		GPIO_WriteBit(OUT1_GPIO_Port, OUT1_Pin, Bit_RESET);
+//		//GPIO_WriteBit(OUT2_GPIO_Port, OUT2_Pin, Bit_RESET); /*马上拉低OUT*/
+//		//GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*马上拉低OUT*/
+//		ShortCircuitTimer = ShortCircuitLastTime;
+//	}
 }
 
 /*******************************

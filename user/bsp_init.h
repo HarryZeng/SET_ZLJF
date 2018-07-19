@@ -22,7 +22,7 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-#include  "stm32f10x.h"
+#include  "stm32f0xx.h"
 #include "project.h"
 #include 	"stdbool.h"
 #include 	"stdint.h"

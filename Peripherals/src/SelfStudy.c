@@ -20,8 +20,8 @@
 #include "SelfStudy.h"
 #include "flash.h"
 #include "display.h"
-#include "stm32f10x_tim.h"
-#include "stm32f10x_dac.h"
+#include "stm32f0xx_tim.h"
+#include "stm32f0xx_dac.h"
 
 /*第一次SET按键按下处理函数*/
 void SelfStudy_SET1(void);;
@@ -95,8 +95,8 @@ void selfstudy(void)
 					/*保持OUT1的状态*/
 				OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);/*获取当前的OUT1状态*/
 				GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)OUT1_STATUS);/*保持着OUT1状态*/
-				OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);/*获取当前的OUT2状态*/
-				GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
+				//OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);/*获取当前的OUT2状态*/
+				//GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)OUT2_STATUS);/*保持着OUT1状态*/
 
 				SelfStudy_SET1();
 				SMG_DisplaySET_Step_1_Mode(2,Final_1);  //显示SET1和信号值  //2018-7-11->Final_1显示信号值
@@ -173,7 +173,7 @@ void SelfStudy_End(void)
 			}
 		
 		GPIO_WriteBit(OUT1_GPIO_Port,OUT1_Pin,(BitAction)GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin));
-		GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin));
+		//GPIO_WriteBit(OUT2_GPIO_Port,OUT2_Pin,(BitAction)GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin));
 		
 		
 		if(S1_MaxValue <= S2_MaxValue)  /*SET_VREF为SET1和SET2中较小的值*/
@@ -212,27 +212,27 @@ void SelfStudy_SET2(void)
 //		}
 }
 
-/*获取四个ADC通道采样后，求平均的值*/
-uint8_t  JudgeSvalue(uint32_t *S_Value)
-{
-	uint8_t flag=0x00;
-		if(S_Value[0]>4000) flag |= 0x01;/*0000 0001*/
-	else flag &= 0xFE;/*1111 1110*/
-	
-		if(S_Value[1]>4000) flag |= 0x02;/*0000 0010*/
-	else flag &= 0xFD;/*1111 1101*/
-	
-		if(S_Value[2]>4000) flag |= 0x04;/*0000 0100*/
-	else flag &= 0xFB;/*1111 1011*/
-	
-		if(S_Value[3]>4000) flag |= 0x08;/*0000 1000*/
-	else flag &= 0xF7;/*1111 0111*/
-	
-	if(flag==0x0f)
-		return 1;
-	else 
-		return 0;
-}
+///*获取四个ADC通道采样后，求平均的值*/
+//uint8_t  JudgeSvalue(uint32_t *S_Value)
+//{
+//	uint8_t flag=0x00;
+//		if(S_Value[0]>4000) flag |= 0x01;/*0000 0001*/
+//	else flag &= 0xFE;/*1111 1110*/
+//	
+//		if(S_Value[1]>4000) flag |= 0x02;/*0000 0010*/
+//	else flag &= 0xFD;/*1111 1101*/
+//	
+//		if(S_Value[2]>4000) flag |= 0x04;/*0000 0100*/
+//	else flag &= 0xFB;/*1111 1011*/
+//	
+//		if(S_Value[3]>4000) flag |= 0x08;/*0000 1000*/
+//	else flag &= 0xF7;/*1111 0111*/
+//	
+//	if(flag==0x0f)
+//		return 1;
+//	else 
+//		return 0;
+//}
 
 /*ADCIN的数据调零*/
 

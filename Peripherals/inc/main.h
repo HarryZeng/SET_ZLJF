@@ -30,7 +30,7 @@
 #define __MAIN_H
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
+#include "stm32f0xx.h"
 
 #ifdef USE_STM320518_EVAL
  #include "stm320518_eval.h"

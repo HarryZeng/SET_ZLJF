@@ -400,30 +400,30 @@ void SMG_DisplayModeDETECT(int16_t DETECT)
 void SMG_DisplaSV(uint32_t SV_counter)
 { 
 		uint8_t k_CSV_counter;
-		
-		k_CSV_counter = GetIntNumber(SV_counter);
-	
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[SV_counter%10];						//D1
-	if(k_CSV_counter>=2)
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[(SV_counter/10)%10];			//D2
-	else
-			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
-	if(k_CSV_counter>=3)
-		SMG_data_Decode_table[0][2]=data_SMG_seg_table[(SV_counter/100)%10];			//D3
-	else
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
-	if(k_CSV_counter>=4)
-		SMG_data_Decode_table[0][3]=data_SMG_seg_table[(SV_counter/1000)%10];		//D4
-	else
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-	if(k_CSV_counter>=5)
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[(SV_counter/10000)%10];		//D5
-	else
-			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];										//none
+//		
+//		k_CSV_counter = GetIntNumber(SV_counter);
+//	
+//		SMG_data_Decode_table[0][0]=data_SMG_seg_table[SV_counter%10];						//D1
+//	if(k_CSV_counter>=2)
+//		SMG_data_Decode_table[0][1]=data_SMG_seg_table[(SV_counter/10)%10];			//D2
+//	else
+//			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
+//	if(k_CSV_counter>=3)
+//		SMG_data_Decode_table[0][2]=data_SMG_seg_table[(SV_counter/100)%10];			//D3
+//	else
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//	if(k_CSV_counter>=4)
+//		SMG_data_Decode_table[0][3]=data_SMG_seg_table[(SV_counter/1000)%10];		//D4
+//	else
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//	if(k_CSV_counter>=5)
+//		SMG_data_Decode_table[0][4]=data_SMG_seg_table[(SV_counter/10000)%10];		//D5
+//	else
+//			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];										//none
 
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[19];												//D6	v
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[20];												//D7	s
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];												//D8	none
+//		SMG_data_Decode_table[0][5]=data_SMG_seg_table[19];												//D6	v
+//		SMG_data_Decode_table[0][6]=data_SMG_seg_table[20];												//D7	s
+//		SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];												//D8	none
 }
 
 /*功能菜单-CSV*/
@@ -459,31 +459,31 @@ void SMG_DisplaCSV(uint32_t CSV_counter)
 /*功能菜单-FSV*/
 void SMG_DisplayFSV(uint32_t FSV_counter)
 { 
-		uint8_t k_CFV_counter;
-		
-		k_CFV_counter = GetIntNumber(FSV_counter);
-	
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[FSV_counter%10];						//D1
-	if(k_CFV_counter>=2)
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[(FSV_counter/10)%10];			//D2
-	else
-			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
-	if(k_CFV_counter>=3)
-		SMG_data_Decode_table[0][2]=data_SMG_seg_table[(FSV_counter/100)%10];			//D3
-	else
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
-	if(k_CFV_counter>=4)
-		SMG_data_Decode_table[0][3]=data_SMG_seg_table[(FSV_counter/1000)%10];		//D4
-	else
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-	if(k_CFV_counter>=5)
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[(FSV_counter/10000)%10];		//D5
-	else
-			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];										//none
+//		uint8_t k_CFV_counter;
+//		
+//		k_CFV_counter = GetIntNumber(FSV_counter);
+//	
+//		SMG_data_Decode_table[0][0]=data_SMG_seg_table[FSV_counter%10];						//D1
+//	if(k_CFV_counter>=2)
+//		SMG_data_Decode_table[0][1]=data_SMG_seg_table[(FSV_counter/10)%10];			//D2
+//	else
+//			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
+//	if(k_CFV_counter>=3)
+//		SMG_data_Decode_table[0][2]=data_SMG_seg_table[(FSV_counter/100)%10];			//D3
+//	else
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//	if(k_CFV_counter>=4)
+//		SMG_data_Decode_table[0][3]=data_SMG_seg_table[(FSV_counter/1000)%10];		//D4
+//	else
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//	if(k_CFV_counter>=5)
+//		SMG_data_Decode_table[0][4]=data_SMG_seg_table[(FSV_counter/10000)%10];		//D5
+//	else
+//			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];										//none
 
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[19];												//D6	v
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[20];												//D7	s
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[15];												//D8	f
+//		SMG_data_Decode_table[0][5]=data_SMG_seg_table[19];												//D6	v
+//		SMG_data_Decode_table[0][6]=data_SMG_seg_table[20];												//D7	s
+//		SMG_data_Decode_table[0][7]=data_SMG_seg_table[15];												//D8	f
 }
 
 
@@ -776,87 +776,87 @@ void SMG_DisplayMenuTwo_SHOT_SET(int16_t SHOT,uint8_t BlinkONOFF)
 /*功能菜单-2-5,DEL*/
 void SMG_DisplayMenuTwo_DEL(void)
 {
-			static uint8_t Blinkflag=1;
-	
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[35];						//D1	seg->f
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[35];						//D2	seg->f
-		SMG_data_Decode_table[0][2]=data_SMG_seg_table[35];						//D3	seg->f
-		SMG_data_Decode_table[0][3]=data_SMG_seg_table[35];						//D4	seg->f
-	
-		if(Blinkflag)
-		{
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[23];						//D6	L
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];						//D7	E
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];						//D8	D
-			Blinkflag = 0;
-		}
-		else
-		{
-			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
-			SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];						//D6	none
-			SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];						//D7	none
-			SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];						//D8	none
-			Blinkflag = 1;
-		}
+//			static uint8_t Blinkflag=1;
+//	
+//		SMG_data_Decode_table[0][0]=data_SMG_seg_table[35];						//D1	seg->f
+//		SMG_data_Decode_table[0][1]=data_SMG_seg_table[35];						//D2	seg->f
+//		SMG_data_Decode_table[0][2]=data_SMG_seg_table[35];						//D3	seg->f
+//		SMG_data_Decode_table[0][3]=data_SMG_seg_table[35];						//D4	seg->f
+//	
+//		if(Blinkflag)
+//		{
+//		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
+//		SMG_data_Decode_table[0][5]=data_SMG_seg_table[23];						//D6	L
+//		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];						//D7	E
+//		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];						//D8	D
+//			Blinkflag = 0;
+//		}
+//		else
+//		{
+//			SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
+//			SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];						//D6	none
+//			SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];						//D7	none
+//			SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];						//D8	none
+//			Blinkflag = 1;
+//		}
 }
 
 /*功能菜单-2-5-1,DEL设定菜单*/
 void SMG_DisplayMenuTwo_DEL_SET(int16_t DEL,uint8_t BlinkONOFF)
 {
-		static uint8_t Blinkflag=1;
-		uint8_t k_SHOT;
-		
-		k_SHOT = GetIntNumber(DEL);
-	if(BlinkONOFF)
-	{
-		if(Blinkflag)
-		{
-			SMG_data_Decode_table[0][0]=data_SMG_seg_table[DEL%10];					//D1
-			if(k_SHOT>=2)
-				SMG_data_Decode_table[0][1]=data_SMG_seg_table[(DEL/10)%10];			//D2
-			else
-				SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
-			if(k_SHOT>=3)
-				SMG_data_Decode_table[0][2]=data_SMG_seg_table[(DEL/100)%10];		//D3
-			else
-				SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
-			if(k_SHOT>=4)
-				SMG_data_Decode_table[0][3]=data_SMG_seg_table[(DEL/1000)%10];		//D4
-			else
-				SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-			Blinkflag = 0;
-		}
-		else
-		{
-			SMG_data_Decode_table[0][0]=data_SMG_seg_table[22];					//D1	none
-			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];					//D2	none
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];					//D3	none
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];					//D4	none
-			Blinkflag = 1;
-		}
-	}
-	else
-	{
-			SMG_data_Decode_table[0][0]=data_SMG_seg_table[DEL%10];					//D1
-			if(k_SHOT>=2)
-				SMG_data_Decode_table[0][1]=data_SMG_seg_table[(DEL/10)%10];			//D2
-			else
-				SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
-			if(k_SHOT>=3)
-				SMG_data_Decode_table[0][2]=data_SMG_seg_table[(DEL/100)%10];		//D3
-			else
-				SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
-			if(k_SHOT>=4)
-				SMG_data_Decode_table[0][3]=data_SMG_seg_table[(DEL/1000)%10];		//D4
-			else
-				SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-		
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
-		SMG_data_Decode_table[0][5]=data_SMG_seg_table[23];						//D6	L
-		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];						//D7	E
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];						//D8	D
-	}
+//		static uint8_t Blinkflag=1;
+//		uint8_t k_SHOT;
+//		
+//		k_SHOT = GetIntNumber(DEL);
+//	if(BlinkONOFF)
+//	{
+//		if(Blinkflag)
+//		{
+//			SMG_data_Decode_table[0][0]=data_SMG_seg_table[DEL%10];					//D1
+//			if(k_SHOT>=2)
+//				SMG_data_Decode_table[0][1]=data_SMG_seg_table[(DEL/10)%10];			//D2
+//			else
+//				SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
+//			if(k_SHOT>=3)
+//				SMG_data_Decode_table[0][2]=data_SMG_seg_table[(DEL/100)%10];		//D3
+//			else
+//				SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//			if(k_SHOT>=4)
+//				SMG_data_Decode_table[0][3]=data_SMG_seg_table[(DEL/1000)%10];		//D4
+//			else
+//				SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//			Blinkflag = 0;
+//		}
+//		else
+//		{
+//			SMG_data_Decode_table[0][0]=data_SMG_seg_table[22];					//D1	none
+//			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];					//D2	none
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];					//D3	none
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];					//D4	none
+//			Blinkflag = 1;
+//		}
+//	}
+//	else
+//	{
+//			SMG_data_Decode_table[0][0]=data_SMG_seg_table[DEL%10];					//D1
+//			if(k_SHOT>=2)
+//				SMG_data_Decode_table[0][1]=data_SMG_seg_table[(DEL/10)%10];			//D2
+//			else
+//				SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
+//			if(k_SHOT>=3)
+//				SMG_data_Decode_table[0][2]=data_SMG_seg_table[(DEL/100)%10];		//D3
+//			else
+//				SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//			if(k_SHOT>=4)
+//				SMG_data_Decode_table[0][3]=data_SMG_seg_table[(DEL/1000)%10];		//D4
+//			else
+//				SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//		
+//		SMG_data_Decode_table[0][4]=data_SMG_seg_table[22];						//D5	none
+//		SMG_data_Decode_table[0][5]=data_SMG_seg_table[23];						//D6	L
+//		SMG_data_Decode_table[0][6]=data_SMG_seg_table[14];						//D7	E
+//		SMG_data_Decode_table[0][7]=data_SMG_seg_table[13];						//D8	D
+//	}
 }
 
 
@@ -1001,7 +1001,7 @@ void SMG_DisplaySET_Step_2_Mode(int16_t modeflag,uint32_t ADCINvalue,uint32_t Ne
 void SMG_DisplayOUT_STATUS(uint8_t OUT1_STATUS,uint8_t OUT2_STATUS)
 { 
 		OUT1_STATUS = GPIO_ReadInputDataBit(OUT1_GPIO_Port,OUT1_Pin);
-		OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);
+		//OUT2_STATUS = GPIO_ReadInputDataBit(OUT2_GPIO_Port,OUT2_Pin);
 		//OUT3_STATUS = !GPIO_ReadInputDataBit(OUT3_GPIO_Port,OUT3_Pin);
 
 		if(OUT1_STATUS==0 && OUT2_STATUS==1)
@@ -1074,65 +1074,65 @@ void ParameterDisplay(void)
 /*ATT100  菜单*/
 void SMG_DisplayATT100(int16_t ATT100Value,uint32_t ADCValue)
 { 
-		uint8_t k_ADC_counter,k_ATT_Counter;
-		
-	/*ADC*/
-		k_ADC_counter = GetIntNumber(ADCValue);
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[ADCValue%10];							//D1
-		if(k_ADC_counter>=2)
-			SMG_data_Decode_table[0][1]=data_SMG_seg_table[(ADCValue/10)%10];				//D2
-		else
-			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
-		if(k_ADC_counter>=3)
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[(ADCValue/100)%10];				//D3
-		else
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
-		if(k_ADC_counter>=4)
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[(ADCValue/1000)%10];			//D4
-		else
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-		if(k_ADC_counter>=4)
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[(ADCValue/1000)%10];			//D4
-		else
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
-		
-		/*ATT100*/
-		k_ATT_Counter = GetIntNumber(ATT100Value);
-		SMG_data_Decode_table[0][4]=data_SMG_seg_table[ATT100Value%10];								//D5
-		if(k_ATT_Counter>=2)
-			SMG_data_Decode_table[0][5]=data_SMG_seg_table[(ATT100Value/10)%10];				//D6
-		else
-			SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];													//none
-		if(k_ATT_Counter>=3)
-			SMG_data_Decode_table[0][6]=data_SMG_seg_table[(ATT100Value/100)%10];				//D7
-		else
-			SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];													//none
+//		uint8_t k_ADC_counter,k_ATT_Counter;
+//		
+//	/*ADC*/
+//		k_ADC_counter = GetIntNumber(ADCValue);
+//		SMG_data_Decode_table[0][0]=data_SMG_seg_table[ADCValue%10];							//D1
+//		if(k_ADC_counter>=2)
+//			SMG_data_Decode_table[0][1]=data_SMG_seg_table[(ADCValue/10)%10];				//D2
+//		else
+//			SMG_data_Decode_table[0][1]=data_SMG_seg_table[22];										//none
+//		if(k_ADC_counter>=3)
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[(ADCValue/100)%10];				//D3
+//		else
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//		if(k_ADC_counter>=4)
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[(ADCValue/1000)%10];			//D4
+//		else
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//		if(k_ADC_counter>=4)
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[(ADCValue/1000)%10];			//D4
+//		else
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[22];										//none
+//		
+//		/*ATT100*/
+//		k_ATT_Counter = GetIntNumber(ATT100Value);
+//		SMG_data_Decode_table[0][4]=data_SMG_seg_table[ATT100Value%10];								//D5
+//		if(k_ATT_Counter>=2)
+//			SMG_data_Decode_table[0][5]=data_SMG_seg_table[(ATT100Value/10)%10];				//D6
+//		else
+//			SMG_data_Decode_table[0][5]=data_SMG_seg_table[22];													//none
+//		if(k_ATT_Counter>=3)
+//			SMG_data_Decode_table[0][6]=data_SMG_seg_table[(ATT100Value/100)%10];				//D7
+//		else
+//			SMG_data_Decode_table[0][6]=data_SMG_seg_table[22];													//none
 
-		SMG_data_Decode_table[0][7]=data_SMG_seg_table[10];														//D8	A
+//		SMG_data_Decode_table[0][7]=data_SMG_seg_table[10];														//D8	A
 }
 
 /*PERCENTAGE  菜单*/
 void SMG_DisplayPERCENTAGE(int16_t PERCENTAGE_Value)
 { 
-		uint8_t k_PER_counter;
-		
-		/*PERCENTAGE*/
-		k_PER_counter = GetIntNumber(PERCENTAGE_Value);
-		
-		SMG_data_Decode_table[0][0]=data_SMG_seg_table[24];				//P 24
-		
-		SMG_data_Decode_table[0][1]=data_SMG_seg_table[PERCENTAGE_Value%10];							//D1
-		if(k_PER_counter>=2)
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[(PERCENTAGE_Value/10)%10];				//D2
-		else
-			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
+//		uint8_t k_PER_counter;
+//		
+//		/*PERCENTAGE*/
+//		k_PER_counter = GetIntNumber(PERCENTAGE_Value);
+//		
+//		SMG_data_Decode_table[0][0]=data_SMG_seg_table[24];				//P 24
+//		
+//		SMG_data_Decode_table[0][1]=data_SMG_seg_table[PERCENTAGE_Value%10];							//D1
+//		if(k_PER_counter>=2)
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[(PERCENTAGE_Value/10)%10];				//D2
+//		else
+//			SMG_data_Decode_table[0][2]=data_SMG_seg_table[22];										//none
 
-			SMG_data_Decode_table[0][3]=data_SMG_seg_table[35];      // 35 -
-		
-			SMG_data_Decode_table[0][4]=data_SMG_seg_table[28];				//	R	28
-			SMG_data_Decode_table[0][5]=data_SMG_seg_table[14];				//	E	14
-			SMG_data_Decode_table[0][6]=data_SMG_seg_table[24];				//	P 24
-			SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
+//			SMG_data_Decode_table[0][3]=data_SMG_seg_table[35];      // 35 -
+//		
+//			SMG_data_Decode_table[0][4]=data_SMG_seg_table[28];				//	R	28
+//			SMG_data_Decode_table[0][5]=data_SMG_seg_table[14];				//	E	14
+//			SMG_data_Decode_table[0][6]=data_SMG_seg_table[24];				//	P 24
+//			SMG_data_Decode_table[0][7]=data_SMG_seg_table[22];
 }
 
 

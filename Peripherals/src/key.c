@@ -29,7 +29,7 @@ void PressCallback(ButtonStruct* Button);
 
 void Button_Init(void)
 {
-	GPIO_InitTypeDef gpio_init_structure;  
+	GPIO_InitTypeDef GPIO_Init_structure;  
 	SetButton.ButtonPort = BUTTON_SET_GPIO_Port;
 	SetButton.ButtonPin = BUTTON_SET_Pin;
 	SetButton.Mode = ShortAndLong;
@@ -74,20 +74,20 @@ void Button_Init(void)
 	DownButton.ShortTime = 2*timer_period;
 	DownButton.LongTime = 20*timer_period;
 	
-  gpio_init_structure.GPIO_Mode = GPIO_Mode_IPD;                                 
-  gpio_init_structure.GPIO_Speed = GPIO_Speed_2MHz;      
+  GPIO_Init_structure.GPIO_Mode = GPIO_Mode_IN;                                 
+  GPIO_Init_structure.GPIO_Speed = GPIO_Speed_2MHz;      
 	
-	gpio_init_structure.GPIO_Pin = UpButton.ButtonPin; 
-	GPIO_Init(UpButton.ButtonPort, &gpio_init_structure);
+	GPIO_Init_structure.GPIO_Pin = UpButton.ButtonPin; 
+	GPIO_Init(UpButton.ButtonPort, &GPIO_Init_structure);
 	
-	gpio_init_structure.GPIO_Pin = DownButton.ButtonPin; 
-	GPIO_Init(DownButton.ButtonPort, &gpio_init_structure);
+	GPIO_Init_structure.GPIO_Pin = DownButton.ButtonPin; 
+	GPIO_Init(DownButton.ButtonPort, &GPIO_Init_structure);
 	
-	gpio_init_structure.GPIO_Pin = ModeButton.ButtonPin; 
-	GPIO_Init(ModeButton.ButtonPort, &gpio_init_structure);
+	GPIO_Init_structure.GPIO_Pin = ModeButton.ButtonPin; 
+	GPIO_Init(ModeButton.ButtonPort, &GPIO_Init_structure);
 	
-	gpio_init_structure.GPIO_Pin = BUTTON_SWITCH_Pin; 
-	GPIO_Init(BUTTON_SWITCH_GPIO_Port, &gpio_init_structure);	
+	//GPIO_Init_structure.GPIO_Pin = BUTTON_SWITCH_Pin; 
+	//GPIO_Init(BUTTON_SWITCH_GPIO_Port, &GPIO_Init_structure);	
 //	
 }
 

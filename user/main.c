@@ -1,16 +1,14 @@
-#include "stm32f10x.h"
+#include "stm32f0xx.h"
 #include "project.h"
 #include "key.h"
 #include "stdio.h"
 #include "display.h"
 #include "menu.h"
-#include "stm32f10x_adc.h"
-#include "stm32f10x_tim.h"
-#include "stm32f10x_flash.h"
-//#include "stm32f10x_dac.h"
-//#include "stm32f10x_exti.h"
-#include "stm32f10x_iwdg.h"
-#include "stm32f10x_pwr.h"
+#include "stm32f0xx_adc.h"
+#include "stm32f0xx_tim.h"
+#include "stm32f0xx_flash.h"
+#include "stm32f0xx_iwdg.h"
+#include "stm32f0xx_pwr.h"
 #include "bsp_init.h"
 #include "flash.h"
 
@@ -20,11 +18,11 @@ uint8_t TIM1step = 0;
 
 RCC_ClocksTypeDef SysClock;
 /****************************??????****************************/
-extern uint32_t ShortCircuitLastTime;
+
 volatile uint32_t timenum;
 extern uint8_t EventFlag;
 extern uint8_t ShortCircuit;
-extern uint8_t ShortCircuitTimer;
+
 extern int16_t OUT2_TimerCounter;
 extern int16_t OUT3_TimerCounter;
 extern uint8_t OUT3;
@@ -62,12 +60,12 @@ void DelaymsSet(int16_t ms)
 
 void TIM4_IRQHandler()
 {
-	if (TIM_GetITStatus(TIM4, TIM_FLAG_Update)) //判断发生update事件中断
-	{
-		TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update); //清除update事件中断标志
-													  //GPIO_WriteBit(OUT3_GPIO_Port, OUT3_Pin, (BitAction)(1 - GPIO_ReadOutputDataBit(OUT3_GPIO_Port, OUT3_Pin)));
-													  //GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*拉高*/
-	}
+//	if (TIM_GetITStatus(TIM4, TIM_FLAG_Update)) //判断发生update事件中断
+//	{
+//		TIM_ClearITPendingBit(TIM4, TIM_FLAG_Update); //清除update事件中断标志
+//													  //GPIO_WriteBit(OUT3_GPIO_Port, OUT3_Pin, (BitAction)(1 - GPIO_ReadOutputDataBit(OUT3_GPIO_Port, OUT3_Pin)));
+//													  //GPIO_WriteBit(OUT3_GPIO_Port,OUT3_Pin,Bit_RESET);/*拉高*/
+//	}
 }
 
 extern bool timeflag;
@@ -91,11 +89,11 @@ void TIM2_IRQHandler()
 				OUT3_TimerCounter++;
 
 			SMG_Diplay();
-			ShortCircuitLastTime++;
-			if (ShortCircuit)
-				ShortCircuitCounter++;
-			else
-				ShortCircuitCounter = 0;
+			//ShortCircuitLastTime++;
+//			if (ShortCircuit)
+//				ShortCircuitCounter++;
+//			else
+//				ShortCircuitCounter = 0;
 		}
 		if (timenum % 80 == 0) /*80us*100us=8000us*/
 		{
@@ -140,8 +138,8 @@ void TIM3_IRQHandler(void)
 void bsp_init(void)
 {
 	RCC_Configuration();
-	PWR_PVDLevelConfig(PWR_PVDLevel_2V9); /*设置PVD电压检测*/
-	PWR_PVDCmd(ENABLE);
+	//PWR_PVDLevelConfig(PWR_PVDLevel_2V9); /*设置PVD电压检测*/
+	//PWR_PVDCmd(ENABLE);
 	TIM2_init();
 	TIM3_init();
 	ADC1_Configuration();
@@ -197,8 +195,8 @@ int main(void)
 
 	CheckFLag = FlashCheck();
 
-	//if (1)
-	if(CheckFLag)
+	if (1)
+	//if(CheckFLag)
 	{
 		/*程序运行次数检测*/
 		ProgramCheck();
@@ -214,7 +212,7 @@ int main(void)
 }
 
 /*************************************************************/
-#define FLASH_START_ADDR1 0x0800FFF0
+#define FLASH_START_ADDR1 0x08007FF0
 
 uint8_t *UID = (uint8_t *)0x1FFFF7E8;  //获取UID  stm32f0:0x1FFFF7AC,stm32f100:0x1FFFF7E8
 uint32_t Fml_Constant = 0x19101943;	//输入到公式的常熟

@@ -4,7 +4,7 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-#include  "stm32f10x.h"
+#include "stm32f0xx.h"
 
 #define _Gpio_12_set  GPIO_WriteBit(GPIOA, GPIO_Pin_12, (BitAction)!GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_12))
 #define _Gpio_7_set  GPIO_WriteBit(GPIOA, GPIO_Pin_7, (BitAction)!GPIO_ReadOutputDataBit(GPIOA, GPIO_Pin_7))
@@ -14,64 +14,69 @@
 #define DAC_OUT_Enable	 	 
 	 
 /* Private define ------------------------------------------------------------*/
-#define D5_Pin 										GPIO_Pin_13
-#define D5_GPIO_Port 							GPIOC
+/*SMG*/
+#define D1_Pin 										GPIO_Pin_2
+#define D1_GPIO_Port 							GPIOB
+#define D2_Pin 										GPIO_Pin_0
+#define D2_GPIO_Port 							GPIOB
+#define D3_Pin 										GPIO_Pin_7
+#define D3_GPIO_Port 							GPIOA
+#define D4_Pin 										GPIO_Pin_6
+#define D4_GPIO_Port 							GPIOA
+#define D5_Pin 										GPIO_Pin_15
+#define D5_GPIO_Port 							GPIOA
 #define D6_Pin 										GPIO_Pin_14
 #define D6_GPIO_Port 							GPIOC
 #define D7_Pin 										GPIO_Pin_15
 #define D7_GPIO_Port 							GPIOC
 #define D9_Pin 										GPIO_Pin_0
-#define D9_GPIO_Port 							GPIOA
+#define D9_GPIO_Port 							GPIOC
 #define D8_Pin 										GPIO_Pin_1
-#define D8_GPIO_Port 							GPIOA
-#define D_Pin 										GPIO_Pin_9
-#define D_GPIO_Port 							GPIOB
+#define D8_GPIO_Port 							GPIOC
+/*SMG*/
+#define A_Pin 										GPIO_Pin_0
+#define A_GPIO_Port 							GPIOA
 #define B_Pin 										GPIO_Pin_8
 #define B_GPIO_Port 							GPIOB
-#define E_Pin 										GPIO_Pin_7
-#define E_GPIO_Port 							GPIOB
-#define A_Pin 										GPIO_Pin_6
-#define A_GPIO_Port 							GPIOB
-#define F_Pin 										GPIO_Pin_5
-#define F_GPIO_Port 							GPIOB
-#define G_Pin 										GPIO_Pin_4
-#define G_GPIO_Port 							GPIOB
-#define D4_Pin 										GPIO_Pin_10
-#define D4_GPIO_Port 							GPIOA
-#define D3_Pin 										GPIO_Pin_11
-#define D3_GPIO_Port 							GPIOA
-#define D2_Pin 										GPIO_Pin_12
-#define D2_GPIO_Port 							GPIOA
-#define D1_Pin 										GPIO_Pin_15
-#define D1_GPIO_Port 							GPIOA
-#define C_Pin 										GPIO_Pin_3
+#define C_Pin 										GPIO_Pin_7
 #define C_GPIO_Port 							GPIOB
-
-#define BUTTON_SWITCH_Pin 						GPIO_Pin_10
-#define BUTTON_SWITCH_GPIO_Port 			GPIOB
-#define BUTTON_SET_Pin 								GPIO_Pin_0
-#define BUTTON_SET_GPIO_Port 					GPIOD
-#define BUTTON_MODE_Pin 							GPIO_Pin_12
-#define BUTTON_MODE_GPIO_Port 				GPIOB
-#define BUTTON_DOWN_Pin 							GPIO_Pin_13
-#define BUTTON_DOWN_GPIO_Port 				GPIOB
-#define BUTTON_UP_Pin 								GPIO_Pin_14
-#define BUTTON_UP_GPIO_Port 					GPIOB
-
-#define OUT1_Pin 											GPIO_Pin_9
+#define D_Pin 										GPIO_Pin_6
+#define D_GPIO_Port 							GPIOB
+#define E_Pin 										GPIO_Pin_4
+#define E_GPIO_Port 							GPIOB
+#define F_Pin 										GPIO_Pin_3
+#define F_GPIO_Port 							GPIOB
+#define G_Pin 										GPIO_Pin_5
+#define G_GPIO_Port 							GPIOB
+/*BUTTON*/
+//#define BUTTON_SWITCH_Pin 						GPIO_Pin_10
+//#define BUTTON_SWITCH_GPIO_Port 			GPIOB
+#define BUTTON_SET_Pin 								GPIO_Pin_9
+#define BUTTON_SET_GPIO_Port 					GPIOA
+#define BUTTON_MODE_Pin 							GPIO_Pin_11
+#define BUTTON_MODE_GPIO_Port 				GPIOA
+#define BUTTON_DOWN_Pin 							GPIO_Pin_12
+#define BUTTON_DOWN_GPIO_Port 				GPIOA
+#define BUTTON_UP_Pin 								GPIO_Pin_10
+#define BUTTON_UP_GPIO_Port 					GPIOA
+/*OUT*/
+#define OUT1_Pin 											GPIO_Pin_3
 #define OUT1_GPIO_Port 								GPIOA
-#define OUT2_Pin 											GPIO_Pin_8
-#define OUT2_GPIO_Port 								GPIOA
-
-#define COMP_OUT1_Pin 								GPIO_Pin_2
-#define COMP_OUT1_GPIO_Port 					GPIOA
-
+/*PWM*/
+#define DIS_Pin 											GPIO_Pin_4
+#define DIS_GPIO_Port 								GPIOA
+#define CLK_Pin 											GPIO_Pin_8
+#define CLK_GPIO_Port 								GPIOA
+#define PWM_Pin 											GPIO_Pin_5
+#define PWM_GPIO_Port 								GPIOA
+#define SI_Pin 												GPIO_Pin_1
+#define SI_GPIO_Port 									GPIOB
 /*DAC*/
 #ifdef  DAC_OUT_Enable
 //	#define DACOUT1_Pin						GPIO_Pin_4  //?????
 //	#define DACOUT1_GPIO_Port			GPIOA
 	#endif 
-#define ADCIN_1_Pin						GPIO_Pin_3
+#define ADCIN_1_Pin						GPIO_Pin_2
 #define ADCIN_1_GPIO_Port			GPIOA
 //#define ADCIN_2_Pin						GPIO_Pin_2
 //#define ADCIN_2_GPIO_Port			GPIOA
